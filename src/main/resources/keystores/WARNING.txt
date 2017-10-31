@@ -1,0 +1,3 @@
+WARNING!!!
+
+The security certificate and keys in this directory are meant only for local development purposes.

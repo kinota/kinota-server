@@ -1,0 +1,112 @@
+logging:
+  level:
+    org.springframework.web: DEBUG
+    guru.springframework.controllers: DEBUG
+    org.hibernate: DEBUG
+
+server:
+  contextPath: /SensorThingsService
+
+spring:
+  datasource:
+      url: "jdbc:h2:mem:authdb"
+      driverClassName: org.h2.Driver
+      username: sa
+      password: ""
+      initialize: true
+  jpa:
+      database-platform: org.hibernate.dialect.H2Dialect
+      hibernate.ddl-auto: create
+  h2.console.enabled: true
+
+sta:
+  # ApiVersion - The version tag of the API used in the URL.
+  ApiVersion: v1.0
+  # serviceRootUrl - The base URL of the SensorThings Server without version.
+  serviceRootUrl: http://localhost:8080/SensorThingsService
+  # defaultCount - The default value for the $count query option.
+  defaultCount: true
+  # defaultTop - The default value for the $top query option.
+  defaultTop: 20
+  # maxTop - The maximum allowed value for the $top query option.
+  maxTop: 100
+  # useAbsoluteNavigationLinks - If true, navigationLinks are absolute, otherwise relative.
+  useAbsoluteNavigationLinks: false
+  mqtt:
+    # mqtt.mqttServerImplementationClass - The java class used for running the MQTT server (must implement MqttServer interface)
+    mqttServerImplementationClass: de.fraunhofer.iosb.ilt.sensorthingsserver.mqtt.moquette.MoquetteMqttServer
+    # mqtt.Enabled - Specifies wether MQTT support will be enabled or not.
+    Enabled: true
+    # mqtt.Port - The port the MQTT server runs on.
+    Port: 1883
+    # mqtt.QoS - Quality of Service Level for MQTT messages.
+    QoS: 0
+    # mqtt.SubscribeMessageQueueSize - Queue size for messages to be pubslihed via MQTT.
+    SubscribeMessageQueueSize: 100
+    # mqtt.SubscribeThreadPoolSize - Number of threads use to dispatch MQTT notifications.
+    SubscribeThreadPoolSize: 10
+    # mqtt.CreateMessageQueueSize - Queue size for create observation requests via MQTT.
+    CreateMessageQueueSize: 100
+    # mqtt.CreateThreadPoolSize - Number of threads use to dispatch observation creation requests.
+    CreateThreadPoolSize: 10
+    # mqtt.Host - The external IP address or host name the MQTT server should listen on. Set to 0.0.0.0 to listen on all interfaces.
+    Host: 0.0.0.0
+    # mqtt.internalHost - The internal host name of the MQTT server.
+    internalHost: localhost
+    # mqtt.WebsocketPort - The port the MQTT server is reachable via WebSocket.
+    WebsocketPort: 9876
+  persistence:
+    # persistence.persistenceManagerImplementationClass - The java class used for persistence (must implement PersistenceManaher interface)
+    persistenceManagerImplementationClass: de.fraunhofer.iosb.ilt.sta.persistence.postgres.PostgresPersistenceManager
+    # persistence.db_jndi_datasource - JNDI data source name
+    db_jndi_datasource: jdbc/sensorThings
+  datasource:
+    name: jdbc/sensorThings
+    auth: Container
+    type: javax.sql.DataSource
+    factory: org.apache.tomcat.jdbc.pool.DataSourceFactory
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/sensorthings
+    username: sensorthings
+    password: ChangeMe
+    maxTotal: 20
+    maxIdle: 10
+    maxWaitMillis: -1
+    defaultAutoCommit: false
+
+liquibase.change-log: classpath:liquibase/tables.xml
+
+---
+spring:
+  profiles: dev
+server:
+  port: 443
+  ssl:
+    key-store: classpath:keystores/local.p12
+    key-store-password: changeit
+    keyStoreType: PKCS12
+    keyAlias: tomcat
+
+---
+spring:
+  profiles: prod
+  datasource:
+      data: file:/etc/kinota/agents.sql
+server:
+  address: 127.0.0.1
+  port: 3001
+  tomcat.protocol_header: x-forwarded-proto
+security.require_ssl: true
+
+---
+spring:
+  profiles: standalone
+  datasource:
+      data: file:/etc/kinota/agents.sql
+server:
+  port: 443
+  ssl:
+    key-store: file:/etc/kinota/keystore.jks
+    key-store-password: changeit
+    keyStoreType: JKS
+    keyAlias: tomcat
