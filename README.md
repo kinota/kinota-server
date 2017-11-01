@@ -203,6 +203,54 @@ insert into agents(id, key) values ('78141f2b-4fb4-4837-92e3-a876046ab435', 'df1
 > ID and keys are just UUIDs, so feel free to generate those however you please.  Note that you should not use the
 above IDs and keys on your server as they would be easily guessed by malicious parties!
 
+### Performing JWT authentication
+
+Currently, Kinota Server allows unauthenticated access to all HTTP `GET` requests.  All `POST`, `PUT`, `PATCH`, and 
+`DELETE` requests require a valid JWT authentication toekn.  You can obtain a JWT authentication token by making the 
+following HTTP request:
+
+Request: `POST https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService/auth/login`
+
+Headers: 
+Header | Value
+--- | ---
+Content-Type | application/JSON
+
+Body:
+```json
+{"id":"265a85f2-00fd-4294-b01e-c120ea103d0c","key":"a74ce162-0dc2-4b11-bf0a-e3c950685559"}
+```
+
+Response:
+```json
+{
+"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNjk0YjllMS1jZTU5LTRmZDUtYjk1ZS1hYTFjNzgwZTgxNTgiLCJyb2xlcyI6IkNHSVNUX0RFVklDRSIsImV4cCI6MTQ5NDQ3MDI2NH0.VBVsKSJ3_EaSFHlP1uUIcXMpytU4UP0jls8iz556Y4ky_6e4tTcYtUiNutKng_G8y0zxTNDk_bvbO_LJmAqrjA"
+}
+```
+
+Once you have a token from an authentication response, you can make an authenticated request as follows.  In this
+example, we will create a new ObservedProperty.
+
+Request: `POST https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService/v1.0/ObservedProperties`
+
+Headers:
+Header | Value
+--- | ---
+Content-Type | application/JSON
+Authorization | Bearer JWT_TOKEN
+
+Based on the above example, the authorization header would be:
+```
+Authorization Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNjk0YjllMS1jZTU5LTRmZDUtYjk1ZS1hYTFjNzgwZTgxNTgiLCJyb2xlcyI6IkNHSVNUX0RFVklDRSIsImV4cCI6MTQ5NDQ3MDI2NH0.VBVsKSJ3_EaSFHlP1uUIcXMpytU4UP0jls8iz556Y4ky_6e4tTcYtUiNutKng_G8y0zxTNDk_bvbO_LJmAqrjA
+```
+
+Body:
+```
+{"name":"Ozone",
+"definition":"https://en.wikipedia.org/wiki/Ozone",
+"description":"Ozone is an inorganic molecule with the chemical formula O3. It is a pale blue gas with a distinctively pungent smell. It is an allotrope of oxygen that is much less stable than the diatomic allotrope O2, breaking down in the lower atmosphere to O2 or dioxygen. Ozone is formed from dioxygen by the action of ultraviolet light and also atmospheric electrical discharges, and is present in low concentrations throughout the Earth's atmosphere (stratosphere). In total, ozone makes up only 0.6 ppm of the atmosphere."}
+```
+
 ## Help
 
 - brian.miles@cgifederal.com
