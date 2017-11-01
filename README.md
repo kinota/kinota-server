@@ -211,7 +211,8 @@ following HTTP request:
 
 Request: `POST https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService/auth/login`
 
-Headers: 
+Headers:
+
 Header | Value
 --- | ---
 Content-Type | application/JSON
@@ -234,6 +235,7 @@ example, we will create a new ObservedProperty.
 Request: `POST https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService/v1.0/ObservedProperties`
 
 Headers:
+
 Header | Value
 --- | ---
 Content-Type | application/JSON
