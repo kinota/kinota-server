@@ -195,6 +195,7 @@ nano /etc/kinota/agents.sql
 
 Contents:
 ```
+delete from agents;
 insert into agents(id, key) values ('265a85f2-00fd-4294-b01e-c120ea103d0c', 'a74ce162-0dc2-4b11-bf0a-e3c950685559');
 insert into agents(id, key) values ('289db907-7958-4566-b1be-ea8d50ea6200', '05aaef2c-4281-4cb4-b1ec-28ff53780dee');
 insert into agents(id, key) values ('78141f2b-4fb4-4837-92e3-a876046ab435', 'df1af5ff-4139-4335-801c-decec39d517e');
