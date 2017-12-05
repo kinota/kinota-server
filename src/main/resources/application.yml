@@ -14,6 +14,7 @@ spring:
       username: sa
       password: ""
       initialize: true
+
   jpa:
       database-platform: org.hibernate.dialect.H2Dialect
       hibernate.ddl-auto: create
@@ -73,6 +74,10 @@ sta:
     maxIdle: 10
     maxWaitMillis: -1
     defaultAutoCommit: false
+    testOnBorrow: true
+    validationQuery: SELECT 1;
+    validationInterval: 5000
+
 
 liquibase.change-log: classpath:liquibase/tables.xml
 

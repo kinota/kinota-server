@@ -60,6 +60,10 @@ public class Application extends SpringBootServletInitializer {
             }
 
             @Override
+            /**
+             * Configure Tomcat connection pooling.  In the future other configuration parameters
+             * could be added from https://tomcat.apache.org/tomcat-8.0-doc/jdbc-pool.html
+             */
             protected void postProcessContext(Context context) {
                 ContextResource r = new ContextResource();
                 r.setName(env.getProperty("sta.datasource.name", "jdbc/sensorThings"));
@@ -83,6 +87,12 @@ public class Application extends SpringBootServletInitializer {
                         env.getProperty("sta.datasource.maxWaitMillis", "-1"));
                 r.setProperty("defaultAutoCommit",
                         env.getProperty("sta.datasource.defaultAutoCommit", "false"));
+                r.setProperty("testOnBorrow",
+                        env.getProperty("sta.datasource.testOnBorrow", "true"));
+                r.setProperty("validationQuery",
+                        env.getProperty("sta.datasource.validationQuery", "SELECT 1;"));
+                r.setProperty("validationInterval",
+                        env.getProperty("sta.datasource.validationInterval", "5000"));
 
                 context.getNamingResources().addResource(r);
             }
