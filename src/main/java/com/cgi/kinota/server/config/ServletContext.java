@@ -32,6 +32,9 @@ public class ServletContext implements ServletContextInitializer {
         ctx.setInitParameter("maxTop",
                 env.getProperty("sta.maxTop",
                         "100"));
+        ctx.setInitParameter("maxDataSize",
+                env.getProperty("sta.maxDataSize",
+                        "25000000"));
         ctx.setInitParameter("useAbsoluteNavigationLinks",
                 env.getProperty("sta.useAbsoluteNavigationLinks",
                         "false"));

@@ -31,6 +31,8 @@ sta:
   defaultTop: 20
   # maxTop - The maximum allowed value for the $top query option.
   maxTop: 100
+  # maxDataSize - The maximum allowed estimated data size (in bytes) for responses.
+  maxDataSize: 25000000
   # useAbsoluteNavigationLinks - If true, navigationLinks are absolute, otherwise relative.
   useAbsoluteNavigationLinks: false
   mqtt:
