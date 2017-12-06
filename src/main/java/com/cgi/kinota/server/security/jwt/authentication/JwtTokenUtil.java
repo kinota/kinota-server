@@ -27,6 +27,8 @@ import com.cgi.kinota.server.security.jwt.JwtExpiredTokenException;
 import io.jsonwebtoken.*;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -42,15 +44,21 @@ import java.util.List;
  */
 @Component
 public class JwtTokenUtil {
-
     public static final Integer JWT_COOKIE_EXPIRATION_S = 60 * 20; // 20 minutes
     public static final Long JWT_TOKEN_EXPIRATION_MS = 1000L * JWT_COOKIE_EXPIRATION_S; // 20 minutes
     public static final String JWT_TOKEN_HEADER = "Authorization";
 
     String secret;
 
-    public JwtTokenUtil() {
-        secret = "replaceMeEventually";
+    @Autowired
+    public JwtTokenUtil(Environment env) {
+        String s = null;
+        if (env != null) {
+            s = env.getProperty("sta.jwtSecret", "ReplaceMeWithSomethingLongArbitraryAndHardToGuess");
+        } else {
+            s = "G#tg$%GH5Ju6k*k*(o886%&U^4y%#t$$#TG$@yu7k8htHY%J67j^k&*k97l9&7k5H4";
+        }
+        secret = s;
     }
 
     public String createTokenForUser(String userName) {

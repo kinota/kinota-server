@@ -120,10 +120,17 @@ server {
 To run Kinota Server in production mode, do something like the following:
 
 ```bash
-java -jar /path/to/kinota-server.jar --spring.profiles.active=prod --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService"
+java -jar /path/to/kinota-server.jar --spring.profiles.active=prod --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET"
 ```
 
-> You will probably want to run this as a service on whatever operating system you are using.  Here is an example for
+> WARNING: It is imperative that you set the `--sta.jwtSecret` option from the command line when running in production
+mode.  If you do not, the default secret will be used, which means that other users of Kinota Server will be able to
+create tokens that can be used to make authenticated HTTP requests against your instance(s) of Kinota Server.  Also
+note that if you are running multiple instances of Kinota Server behind a load balancer, you will want to use the same
+secret for all instances; this will allow tokens issued by one instance to be used with another instance within your
+load balancing pool.
+
+You will probably want to run this as a service on whatever operating system you are using.  Here is an example for
 modern versions of Debian:
 ```
 nano /etc/systemd/system/kinota-server.service
@@ -136,7 +143,7 @@ After=syslog.target
  
 [Service]
 Type=forking
-ExecStart=/bin/sh -c nohup java -jar /path/to/kinota-server.jar --spring.profiles.active=prod --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" >> /var/log/kinota-server.log 2>&1 &'
+ExecStart=/bin/sh -c nohup java -jar /path/to/kinota-server.jar --spring.profiles.active=prod --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
 ```
 
 Enable new service on boot and run it now:
@@ -173,9 +180,16 @@ chmod 500 kinota/
 Then you should be able to run Kinota Server as follows:
 
 ```bash
-java -jar /path/to/kinota-server.jar --spring.profiles.active=standalone --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService"
+java -jar /path/to/kinota-server.jar --spring.profiles.active=standalone --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET"
 ```
-> You can also configure the location of the keystore by specifying the `--server.ssl.key-store` runtime parameter.
+> WARNING: It is imperative that you set the `--sta.jwtSecret` option from the command line when running in standalone
+mode.  If you do not, the default secret will be used, which means that other users of Kinota Server will be able to
+create tokens that can be used to make authenticated HTTP requests against your instance(s) of Kinota Server.  Also
+note that if you are running multiple instances of Kinota Server behind a load balancer, you will want to use the same
+secret for all instances; this will allow tokens issued by one instance to be used with another instance within your
+load balancing pool.
+
+You can also configure the location of the keystore by specifying the `--server.ssl.key-store` runtime parameter.
 
 ## Configuring JWT authentication
 

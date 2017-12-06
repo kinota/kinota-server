@@ -14,13 +14,13 @@ spring:
       username: sa
       password: ""
       initialize: true
-
   jpa:
       database-platform: org.hibernate.dialect.H2Dialect
       hibernate.ddl-auto: create
   h2.console.enabled: true
 
 sta:
+  jwtSecret: ReplaceMeWithSomethingLongArbitraryAndHardToGuess
   # ApiVersion - The version tag of the API used in the URL.
   ApiVersion: v1.0
   # serviceRootUrl - The base URL of the SensorThings Server without version.
@@ -79,7 +79,6 @@ sta:
     testOnBorrow: true
     validationQuery: SELECT 1;
     validationInterval: 5000
-
 
 liquibase.change-log: classpath:liquibase/tables.xml
 
