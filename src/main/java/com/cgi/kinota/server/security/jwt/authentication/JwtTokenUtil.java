@@ -60,7 +60,7 @@ public class JwtTokenUtil {
     public JwtTokenUtil(Environment env) {
         String s = null;
         if (env != null) {
-            s = env.getProperty("sta.jwtSecret","ReplaceMeWithSomethingLongArbitraryAndHardToGuess");
+            s = env.getProperty("sta.jwtSecret", "ReplaceMeWithSomethingLongArbitraryAndHardToGuess");
         } else {
             s = "G#tg$%GH5Ju6k*k*(o886%&U^4y%#t$$#TG$@yu7k8htHY%J67j^k&*k97l9&7k5H4";
         }
