@@ -3,7 +3,7 @@
 Release date February 8, 2018
 
 ## New features
-* Support for version 1.4 of Fraunhofer SensorThings Server
+* Support for version 1.4 of Fraunhofer SensorThingsServer
     * Entities with UUID IDs are now supported
 
 ## Bugfixes
