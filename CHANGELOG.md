@@ -1,4 +1,17 @@
 
+# Version 1.0.2
+Release date February 8, 2018
+
+## New features
+* Support for version 1.4 of Fraunhofer SensorThings Server
+    * Entities with UUID IDs are now supported
+
+## Bugfixes
+N/A
+
+## Security
+N/A
+
 # Version 1.0.1
 Release date December 5, 2017
 
