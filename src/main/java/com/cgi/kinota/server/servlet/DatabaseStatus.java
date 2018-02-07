@@ -1,6 +1,7 @@
 package com.cgi.kinota.server.servlet;
 
 import de.fraunhofer.iosb.ilt.sta.persistence.postgres.PostgresPersistenceManager;
+import de.fraunhofer.iosb.ilt.sta.persistence.PersistenceManagerFactory;
 import de.fraunhofer.iosb.ilt.sta.settings.CoreSettings;
 import liquibase.Contexts;
 import liquibase.Liquibase;
@@ -47,6 +48,8 @@ public class DatabaseStatus extends HttpServlet {
      */
     protected void processGetRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CoreSettings coreSettings = (CoreSettings) request.getServletContext().getAttribute(ContextListener.TAG_CORE_SETTINGS);
+        PersistenceManagerFactory.init(coreSettings);
+
         response.setContentType("text/html;charset=UTF-8");
         LOGGER.info("DatabaseStatus Servlet called.");
         try (PrintWriter out = response.getWriter()) {
@@ -62,29 +65,11 @@ public class DatabaseStatus extends HttpServlet {
             out.println("<button name='doupdate' value='Do Update' type='submit'>Do Update</button>");
             out.println("</form></p>");
             out.println("<p><a href='.'>Back...</a></p>");
-            try {
-                Connection connection = PostgresPersistenceManager.getConnection(coreSettings);
 
-                Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
-                Liquibase liquibase = new liquibase.Liquibase("liquibase/tables.xml", new ClassLoaderResourceAccessor(), database);
-                out.println("<pre>");
-                liquibase.update(new Contexts(), out);
-                out.println("</pre>");
-                database.commit();
-                database.close();
-                connection.close();
-
-            } catch (SQLException | DatabaseException | NamingException ex) {
-                LOGGER.error("Could not initialise database.", ex);
-                out.println("<p>Failed to initialise database:<br>");
-                out.println(ex.getLocalizedMessage());
-                out.println("</p>");
-            } catch (LiquibaseException ex) {
-                LOGGER.error("Could not upgrade database.", ex);
-                out.println("<p>Failed to upgrade database:<br>");
-                out.println(ex.getLocalizedMessage());
-                out.println("</p>");
-            }
+            out.println("<pre>");
+            String log = PersistenceManagerFactory.getInstance().create().checkForUpgrades();
+            out.println(log);
+            out.println("</pre>");
 
             out.println("<p>Done. Click the button to execute the listed updates.</p>");
             out.println("</body>");
@@ -93,8 +78,10 @@ public class DatabaseStatus extends HttpServlet {
     }
 
     protected void processPostRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         CoreSettings coreSettings = (CoreSettings) request.getServletContext().getAttribute(ContextListener.TAG_CORE_SETTINGS);
+        PersistenceManagerFactory.init(coreSettings);
+
+        response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -104,29 +91,10 @@ public class DatabaseStatus extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet DatabaseStatus at " + request.getContextPath() + "</h1><p>Updating Database</p>");
 
-            try {
-                Connection connection = PostgresPersistenceManager.getConnection(coreSettings);
-
-                Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
-                Liquibase liquibase = new liquibase.Liquibase("liquibase/tables.xml", new ClassLoaderResourceAccessor(), database);
-                out.println("<pre>");
-                liquibase.update(new Contexts());
-                out.println("</pre>");
-                database.commit();
-                database.close();
-                connection.close();
-
-            } catch (SQLException | DatabaseException | NamingException ex) {
-                LOGGER.error("Could not initialise database.", ex);
-                out.println("<p>Failed to initialise database:<br>");
-                out.println(ex.getLocalizedMessage());
-                out.println("</p>");
-            } catch (LiquibaseException ex) {
-                LOGGER.error("Could not upgrade database.", ex);
-                out.println("<p>Failed to upgrade database:<br>");
-                out.println(ex.getLocalizedMessage());
-                out.println("</p>");
-            }
+            out.println("<pre>");
+            String log = PersistenceManagerFactory.getInstance().create().doUpgrades();
+            out.println(log);
+            out.println("</pre>");
 
             out.println("<p>Done. <a href='DatabaseStatus'>Back...</a></p>");
             out.println("</body>");

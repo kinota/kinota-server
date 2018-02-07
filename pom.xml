@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cgi.kinota</groupId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <artifactId>kinota-server</artifactId>
     <packaging>jar</packaging>
     <name>Kinota - SensorThings API Part 1: Sensing (based on Fraunhofer IOSB STA server)</name>
@@ -25,9 +25,9 @@
     <!-- version aliases -->
     <!-- ==================================================================== -->
     <properties>
-        <fraunhofersta.version>1.2</fraunhofersta.version>
-        <springboot.version>1.5.9.RELEASE</springboot.version>
-        <springsecurity.version>4.2.3.RELEASE</springsecurity.version>
+        <fraunhofersta.version>1.4</fraunhofersta.version>
+        <springboot.version>1.5.10.RELEASE</springboot.version>
+        <springsecurity.version>4.2.4.RELEASE</springsecurity.version>
         <postgis.version>2.2.1</postgis.version>
         <postgres.version>9.4.1212</postgres.version>
     </properties>
@@ -57,6 +57,21 @@
         <dependency>
             <groupId>de.fraunhofer.iosb.ilt</groupId>
             <artifactId>SensorThingsServer.SQL</artifactId>
+            <version>${fraunhofersta.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.fraunhofer.iosb.ilt</groupId>
+            <artifactId>SensorThingsServer.SQL.PGLong</artifactId>
+            <version>${fraunhofersta.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.fraunhofer.iosb.ilt</groupId>
+            <artifactId>SensorThingsServer.SQL.PGString</artifactId>
+            <version>${fraunhofersta.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.fraunhofer.iosb.ilt</groupId>
+            <artifactId>SensorThingsServer.SQL.PGUuid</artifactId>
             <version>${fraunhofersta.version}</version>
         </dependency>
         <dependency>

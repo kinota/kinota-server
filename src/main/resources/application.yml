@@ -26,11 +26,11 @@ sta:
   # serviceRootUrl - The base URL of the SensorThings Server without version.
   serviceRootUrl: http://localhost:8080/SensorThingsService
   # defaultCount - The default value for the $count query option.
-  defaultCount: true
+  defaultCount: false
   # defaultTop - The default value for the $top query option.
-  defaultTop: 20
+  defaultTop: 100
   # maxTop - The maximum allowed value for the $top query option.
-  maxTop: 100
+  maxTop: 1000
   # maxDataSize - The maximum allowed estimated data size (in bytes) for responses.
   maxDataSize: 25000000
   # useAbsoluteNavigationLinks - If true, navigationLinks are absolute, otherwise relative.
@@ -47,7 +47,7 @@ sta:
     # mqtt.SubscribeMessageQueueSize - Queue size for messages to be pubslihed via MQTT.
     SubscribeMessageQueueSize: 100
     # mqtt.SubscribeThreadPoolSize - Number of threads use to dispatch MQTT notifications.
-    SubscribeThreadPoolSize: 10
+    SubscribeThreadPoolSize: 20
     # mqtt.CreateMessageQueueSize - Queue size for create observation requests via MQTT.
     CreateMessageQueueSize: 100
     # mqtt.CreateThreadPoolSize - Number of threads use to dispatch observation creation requests.
@@ -59,10 +59,16 @@ sta:
     # mqtt.WebsocketPort - The port the MQTT server is reachable via WebSocket.
     WebsocketPort: 9876
   persistence:
-    # persistence.persistenceManagerImplementationClass - The java class used for persistence (must implement PersistenceManaher interface)
-    persistenceManagerImplementationClass: de.fraunhofer.iosb.ilt.sta.persistence.postgres.PostgresPersistenceManager
+    # persistence.persistenceManagerImplementationClass - The java class used for persistence (must implement
+    # PersistenceManager interface).  Valid options are:
+    #   - de.fraunhofer.iosb.ilt.sta.persistence.postgres.longid.PostgresPersistenceManagerLong
+    #   - de.fraunhofer.iosb.ilt.sta.persistence.postgres.stringid.PostgresPersistenceManagerString
+    #   - de.fraunhofer.iosb.ilt.sta.persistence.postgres.uuidid.PostgresPersistenceManagerUuid
+    persistenceManagerImplementationClass: de.fraunhofer.iosb.ilt.sta.persistence.postgres.longid.PostgresPersistenceManagerLong
     # persistence.db_jndi_datasource - JNDI data source name
     db_jndi_datasource: jdbc/sensorThings
+    # Always add an 'orderby=id asc' to queries to ensure consistent paging.
+    alwaysOrderbyId: false
   datasource:
     name: jdbc/sensorThings
     auth: Container

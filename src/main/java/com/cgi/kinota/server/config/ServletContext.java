@@ -79,5 +79,8 @@ public class ServletContext implements ServletContextInitializer {
         ctx.setInitParameter("persistence.db_jndi_datasource",
                 env.getProperty("sta.persistence.db_jndi_datasource",
                         "jdbc/sensorThings"));
+        ctx.setInitParameter("persistence.alwaysOrderbyId",
+                env.getProperty("sta.persistence.alwaysOrderbyId",
+                        "false"));
     }
 }
