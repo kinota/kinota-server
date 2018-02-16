@@ -268,6 +268,18 @@ Body:
 "description":"Ozone is an inorganic molecule with the chemical formula O3. It is a pale blue gas with a distinctively pungent smell. It is an allotrope of oxygen that is much less stable than the diatomic allotrope O2, breaking down in the lower atmosphere to O2 or dioxygen. Ozone is formed from dioxygen by the action of ultraviolet light and also atmospheric electrical discharges, and is present in low concentrations throughout the Earth's atmosphere (stratosphere). In total, ozone makes up only 0.6 ppm of the atmosphere."}
 ```
 
+## Configuring Logging in Azure
+
+Kinota Server can integrate with Application Insights logging facilities available in Microsoft Azure.  The first step
+is to build Kinota Server with support for Application Insights:
+
+```
+mvn clean package -Pcommon,azure
+```
+
+This will enable both the `common` Maven profile (which is normally enabled by default), as well as the `azure` 
+profile, which will include the Azure Application Insights Logback plugin in the dependencies for Kinota Server.
+
 ## Help
 
 - brian.miles@cgifederal.com
