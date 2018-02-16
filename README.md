@@ -298,7 +298,7 @@ After=network.target
 [Service]
 Type=forking
 Environment=APPLICATION_INSIGHTS_IKEY=78728044-8285-4d31-9dc8-5dae7d89fd5f
-ExecStart=/bin/sh -c nohup java -jar /path/to/kinota-server.jar --spring.profiles.active=azure --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
+ExecStart=/bin/sh -c nohup 'java -jar /path/to/kinota-server.jar --spring.profiles.active=azure --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
 
 [Install]
 WantedBy=multi-user.target
