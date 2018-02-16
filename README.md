@@ -280,6 +280,27 @@ mvn clean package -Pcommon,azure
 This will enable both the `common` Maven profile (which is normally enabled by default), as well as the `azure` 
 profile, which will include the Azure Application Insights Logback plugin in the dependencies for Kinota Server.
 
+Once you deploy the resulting JAR on your server, you will need to update the service definition to specify
+the `APPLICATION_INSIGHTS_IKEY` environment variable, for example:
+
+```
+nano /etc/systemd/system/kinota-server.service
+```
+Contents:
+```
+[Unit]
+Description=Kinota Server
+After=syslog.target
+ 
+[Service]
+Type=forking
+ExecStart=APPLICATION_INSIGHTS_IKEY=78728044-8285-4d31-9dc8-5dae7d89fd5f /bin/sh -c nohup java -jar /path/to/kinota-server.jar --spring.profiles.active=azure --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
+```
+
+The value of `APPLICATION_INSIGHTS_IKEY` refers to your Application Insights subscription ID, and comes from your Azure 
+configuration.  Note that you also need to set `spring.profiles.active` to `azure` to enable Application Insights 
+logging.
+
 ## Help
 
 - brian.miles@cgifederal.com
