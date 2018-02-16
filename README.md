@@ -139,11 +139,14 @@ Contents:
 ```
 [Unit]
 Description=Kinota Server
-After=syslog.target
+After=network.target
  
 [Service]
 Type=forking
-ExecStart=/bin/sh -c nohup java -jar /path/to/kinota-server.jar --spring.profiles.active=prod --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
+ExecStart=/bin/sh -c nohup 'java -jar /path/to/kinota-server.jar --spring.profiles.active=prod --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 Enable new service on boot and run it now:
@@ -290,16 +293,21 @@ Contents:
 ```
 [Unit]
 Description=Kinota Server
-After=syslog.target
+After=network.target
  
 [Service]
 Type=forking
-ExecStart=APPLICATION_INSIGHTS_IKEY=78728044-8285-4d31-9dc8-5dae7d89fd5f /bin/sh -c nohup java -jar /path/to/kinota-server.jar --spring.profiles.active=azure --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
+Environment=APPLICATION_INSIGHTS_IKEY=78728044-8285-4d31-9dc8-5dae7d89fd5f
+ExecStart=/bin/sh -c nohup java -jar /path/to/kinota-server.jar --spring.profiles.active=azure --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
+
+[Install]
+WantedBy=multi-user.target
 ```
 
-The value of `APPLICATION_INSIGHTS_IKEY` refers to your Application Insights subscription ID, and comes from your Azure 
-configuration.  Note that you also need to set `spring.profiles.active` to `azure` to enable Application Insights 
-logging.
+The value of `APPLICATION_INSIGHTS_IKEY` refers to your Application Insights Instrumentation Key, and comes from your 
+Azure configuration (see 
+[here](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-java-get-started) for more information).  
+Note that you also need to set `spring.profiles.active` to `azure` to enable Application Insights logging.
 
 ## Help
 
