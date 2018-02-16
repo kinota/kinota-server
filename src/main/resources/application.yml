@@ -86,6 +86,10 @@ sta:
     validationQuery: SELECT 1;
     validationInterval: 5000
 
+# Used by Liquibase to ensure that the DB schema is up-to-date.
+#   For Long IDs use: classpath:liquibase/tables.xml
+#   For String IDs use: classpath:liquibase/tablesString.xml
+#   For UUID IDs use: classpath:liquibase/tablesUuid.xml
 liquibase.change-log: classpath:liquibase/tables.xml
 
 ---
