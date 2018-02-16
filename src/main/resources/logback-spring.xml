@@ -7,7 +7,7 @@
     <springProfile name="dev">
         <logger name="com.cgi.kinota.server" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE" />
-        </logger>>
+        </logger>
     </springProfile>
     <springProfile name="production">
         <logger name="com.cgi.kinota.server" level="WARN" additivity="false">
