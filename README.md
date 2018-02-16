@@ -139,11 +139,14 @@ Contents:
 ```
 [Unit]
 Description=Kinota Server
-After=syslog.target
+After=network.target
  
 [Service]
 Type=forking
-ExecStart=/bin/sh -c nohup java -jar /path/to/kinota-server.jar --spring.profiles.active=prod --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
+ExecStart=/bin/sh -c nohup 'java -jar /path/to/kinota-server.jar --spring.profiles.active=prod --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 Enable new service on boot and run it now:
@@ -267,6 +270,44 @@ Body:
 "definition":"https://en.wikipedia.org/wiki/Ozone",
 "description":"Ozone is an inorganic molecule with the chemical formula O3. It is a pale blue gas with a distinctively pungent smell. It is an allotrope of oxygen that is much less stable than the diatomic allotrope O2, breaking down in the lower atmosphere to O2 or dioxygen. Ozone is formed from dioxygen by the action of ultraviolet light and also atmospheric electrical discharges, and is present in low concentrations throughout the Earth's atmosphere (stratosphere). In total, ozone makes up only 0.6 ppm of the atmosphere."}
 ```
+
+## Configuring Logging in Azure
+
+Kinota Server can integrate with Application Insights logging facilities available in Microsoft Azure.  The first step
+is to build Kinota Server with support for Application Insights:
+
+```
+mvn clean package -Pcommon,azure
+```
+
+This will enable both the `common` Maven profile (which is normally enabled by default), as well as the `azure` 
+profile, which will include the Azure Application Insights Logback plugin in the dependencies for Kinota Server.
+
+Once you deploy the resulting JAR on your server, you will need to update the service definition to specify
+the `APPLICATION_INSIGHTS_IKEY` environment variable, for example:
+
+```
+nano /etc/systemd/system/kinota-server.service
+```
+Contents:
+```
+[Unit]
+Description=Kinota Server
+After=network.target
+ 
+[Service]
+Type=forking
+Environment=APPLICATION_INSIGHTS_IKEY=78728044-8285-4d31-9dc8-5dae7d89fd5f
+ExecStart=/bin/sh -c nohup 'java -jar /path/to/kinota-server.jar --spring.profiles.active=azure --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
+
+[Install]
+WantedBy=multi-user.target
+```
+
+The value of `APPLICATION_INSIGHTS_IKEY` refers to your Application Insights Instrumentation Key, and comes from your 
+Azure configuration (see 
+[here](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-java-get-started) for more information).  
+Note that you also need to set `spring.profiles.active` to `azure` to enable Application Insights logging.
 
 ## Help
 
