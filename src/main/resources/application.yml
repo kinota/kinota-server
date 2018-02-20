@@ -126,7 +126,3 @@ server:
     key-store-password: changeit
     keyStoreType: JKS
     keyAlias: tomcat
-
----
-spring.profiles: azure
-spring.profiles.include: prod

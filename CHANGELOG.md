@@ -3,8 +3,7 @@
 Release date ???
 
 ## New features
-* Support for version 1.5 of FROST-Server (FRaunhofer Opensource SensorThings-Server)
-* Integrate with Azure Application Insights logging
+* Support for version 1.5.1 of FROST-Server (FRaunhofer Opensource SensorThings-Server)
 
 ## Bugfixes
 N/A
