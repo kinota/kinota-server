@@ -1,9 +1,9 @@
 
 # Version 1.1.0
-Release date ???
+Release date February 26, 2018
 
 ## New features
-* Support for version 1.5.1 of FROST-Server (FRaunhofer Opensource SensorThings-Server)
+* Support for version 1.5.2 of FROST-Server (FRaunhofer Opensource SensorThings-Server)
 
 ## Bugfixes
 N/A
