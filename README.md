@@ -1,9 +1,7 @@
 # Kinota&trade; Server
 
 Kinota&trade; Server is a Spring Boot application that makes it easy to run 
-[Fraunhofer IOSB SensorThingsServer](https://github.com/FraunhoferIOSB/SensorThingsServer) in cloud environments.
-In addition to the functionality provided by Fraunhofer IOSB SensorThingsServer, Kinota Server includes support
-the following security features: TLS and JavaScript Web Token (JWT) authentication.
+[FROST-Server](https://github.com/FraunhoferIOSB/FROST-Server)(FRaunhofer Opensource SensorThings-Server) in cloud environments. In addition to the functionality provided by FROST-Server, Kinota Server includes support the following security features: TLS and JavaScript Web Token (JWT) authentication.
 
 ## License
 
