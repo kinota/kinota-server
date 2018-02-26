@@ -26,7 +26,7 @@ Kinota Server requires the following to build and run:
 mvn clean install
 ```
 
-> Note that only Kinota Server-specific unit tests are run; Fraunhofer IOSB SensorThingsServer tests are not
+> Note that only Kinota Server-specific unit tests are run; FROST-Server tests are not
 run during the Kinota Server build process.
 
 To run without unit tests
@@ -35,16 +35,36 @@ To run without unit tests
 mvn clean install -DskipTests=true
 ```
 
-## Initializing SensorThingsServer database
+## Initializing FROST-Server database
 
 Kinota Server allows for the SensorThingsServer database to be initialized using the `DatabaseStatus` Servlet that is 
-included with SensorThingsServer.  However, for security reasons, Kinota Server will only allow `DatabaseStatus` to be 
-run by user agents connecting to the server from `localhost` (i.e. 127.0.0.1).  Because this can be cumbersome to do
-in server- or cloud-based environments, you can also manually use [Liquibase](http://www.liquibase.org/) to initialize
-the database.  The following steps outline roughly how to do this:
+included with FROST-Server.  However, for security reasons, Kinota Server will only allow `DatabaseStatus` to be 
+run by user agents connecting to the server from `localhost` (i.e. 127.0.0.1).  Before doing so, you should first create
+a PostgreSQL database using something like the following commands:
+```
+create database sensorthings;
+\connect sensorthings;
+create extension postgis;
+\q
+```
+
+Note if you are using UUID IDs, you should do the following instead:
+```
+create database sensorthings;
+\connect sensorthings;
+create extension postgis;
+create extension "uuid-ossp";
+\q
+```
+
+> Note: You will also likely need to create a PostgreSQL user and grant that user rights to the new database. 
+
+Next you can initialize the databse tables using FROST-Server's `DatabaseStatus` tool.  Because it can be cumbersome to 
+do this in server- or cloud-based environments, you can also manually use [Liquibase](http://www.liquibase.org/) to 
+initialize the database.  The following steps outline roughly how to do this:
 * Install Liquibase
-* Download the `tables.xml` and `postgresTriggers.sql` from the [Fraunhofer IOSB SensorThingsServer repo](https://github.com/FraunhoferIOSB/SensorThingsServer/tree/5625ef34a614b1201ec31ad5feba0811bc031cc3/SensorThingsServer.SQL/src/main/resources/liquibase)
-  * Note that the above link links to version 1.1 of SensorThingsServer, which is what Kinota Server currently builds against]
+* Download the `tables.xml` and `postgresTriggers.sql` from the [FROST-Server repo](https://github.com/FraunhoferIOSB/FROST-Server/tree/master/FROST-Server.SQL.PGLong/src/main/resources/liquibase)
+  * Note, if you want to use UUID IDs instead of Long integers, download `tablesUuid` and `postgresTriggersUuid.sql` from [here](https://github.com/FraunhoferIOSB/FROST-Server/tree/master/FROST-Server.SQL.PGUuid/src/main/resources/liquibase) instead
 * Download [PostgreSQL JDBC jar](http://repo.maven.apache.org/maven2/org/postgresql/postgresql/9.4.1212/postgresql-9.4.1212.jar)
 * Run `liquibase update`:
     ```bash
