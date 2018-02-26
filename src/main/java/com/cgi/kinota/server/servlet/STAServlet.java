@@ -2,9 +2,6 @@ package com.cgi.kinota.server.servlet;
 
 import de.fraunhofer.iosb.ilt.sta.Servlet_1_0;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
