@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="aiAppender"
-              class="com.microsoft.applicationinsights.logback.ApplicationInsightsAppender" />
-
     <include resource="org/springframework/boot/logging/logback/base.xml" />
     <springProfile name="dev">
         <logger name="com.cgi.kinota.server" level="DEBUG" additivity="false">
@@ -12,11 +9,6 @@
     <springProfile name="production">
         <logger name="com.cgi.kinota.server" level="WARN" additivity="false">
             <appender-ref ref="CONSOLE" />
-        </logger>
-    </springProfile>
-    <springProfile name="azure">
-        <logger name="com.cgi.kinota.server" level="ERROR" additivity="true">
-            <appender-ref ref="aiAppender" />
         </logger>
     </springProfile>
 </configuration>
