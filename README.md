@@ -1,9 +1,7 @@
 # Kinota&trade; Server
 
 Kinota&trade; Server is a Spring Boot application that makes it easy to run 
-[Fraunhofer IOSB SensorThingsServer](https://github.com/FraunhoferIOSB/SensorThingsServer) in cloud environments.
-In addition to the functionality provided by Fraunhofer IOSB SensorThingsServer, Kinota Server includes support
-the following security features: TLS and JavaScript Web Token (JWT) authentication.
+[FROST-Server](https://github.com/FraunhoferIOSB/FROST-Server)(FRaunhofer Opensource SensorThings-Server) in cloud environments. In addition to the functionality provided by FROST-Server, Kinota Server includes support the following security features: TLS and JavaScript Web Token (JWT) authentication.
 
 ## License
 
@@ -28,7 +26,7 @@ Kinota Server requires the following to build and run:
 mvn clean install
 ```
 
-> Note that only Kinota Server-specific unit tests are run; Fraunhofer IOSB SensorThingsServer tests are not
+> Note that only Kinota Server-specific unit tests are run; FROST-Server tests are not
 run during the Kinota Server build process.
 
 To run without unit tests
@@ -37,16 +35,36 @@ To run without unit tests
 mvn clean install -DskipTests=true
 ```
 
-## Initializing SensorThingsServer database
+## Initializing FROST-Server database
 
 Kinota Server allows for the SensorThingsServer database to be initialized using the `DatabaseStatus` Servlet that is 
-included with SensorThingsServer.  However, for security reasons, Kinota Server will only allow `DatabaseStatus` to be 
-run by user agents connecting to the server from `localhost` (i.e. 127.0.0.1).  Because this can be cumbersome to do
-in server- or cloud-based environments, you can also manually use [Liquibase](http://www.liquibase.org/) to initialize
-the database.  The following steps outline roughly how to do this:
+included with FROST-Server.  However, for security reasons, Kinota Server will only allow `DatabaseStatus` to be 
+run by user agents connecting to the server from `localhost` (i.e. 127.0.0.1).  Before doing so, you should first create
+a PostgreSQL database using something like the following commands:
+```
+create database sensorthings;
+\connect sensorthings;
+create extension postgis;
+\q
+```
+
+Note if you are using UUID IDs, you should do the following instead:
+```
+create database sensorthings;
+\connect sensorthings;
+create extension postgis;
+create extension "uuid-ossp";
+\q
+```
+
+> Note: You will also likely need to create a PostgreSQL user and grant that user rights to the new database. 
+
+Next you can initialize the databse tables using FROST-Server's `DatabaseStatus` tool.  Because it can be cumbersome to 
+do this in server- or cloud-based environments, you can also manually use [Liquibase](http://www.liquibase.org/) to 
+initialize the database.  The following steps outline roughly how to do this:
 * Install Liquibase
-* Download the `tables.xml` and `postgresTriggers.sql` from the [Fraunhofer IOSB SensorThingsServer repo](https://github.com/FraunhoferIOSB/SensorThingsServer/tree/5625ef34a614b1201ec31ad5feba0811bc031cc3/SensorThingsServer.SQL/src/main/resources/liquibase)
-  * Note that the above link links to version 1.1 of SensorThingsServer, which is what Kinota Server currently builds against]
+* Download the `tables.xml` and `postgresTriggers.sql` from the [FROST-Server repo](https://github.com/FraunhoferIOSB/FROST-Server/tree/master/FROST-Server.SQL.PGLong/src/main/resources/liquibase)
+  * Note, if you want to use UUID IDs instead of Long integers, download `tablesUuid` and `postgresTriggersUuid.sql` from [here](https://github.com/FraunhoferIOSB/FROST-Server/tree/master/FROST-Server.SQL.PGUuid/src/main/resources/liquibase) instead
 * Download [PostgreSQL JDBC jar](http://repo.maven.apache.org/maven2/org/postgresql/postgresql/9.4.1212/postgresql-9.4.1212.jar)
 * Run `liquibase update`:
     ```bash
@@ -270,44 +288,6 @@ Body:
 "definition":"https://en.wikipedia.org/wiki/Ozone",
 "description":"Ozone is an inorganic molecule with the chemical formula O3. It is a pale blue gas with a distinctively pungent smell. It is an allotrope of oxygen that is much less stable than the diatomic allotrope O2, breaking down in the lower atmosphere to O2 or dioxygen. Ozone is formed from dioxygen by the action of ultraviolet light and also atmospheric electrical discharges, and is present in low concentrations throughout the Earth's atmosphere (stratosphere). In total, ozone makes up only 0.6 ppm of the atmosphere."}
 ```
-
-## Configuring Logging in Azure
-
-Kinota Server can integrate with Application Insights logging facilities available in Microsoft Azure.  The first step
-is to build Kinota Server with support for Application Insights:
-
-```
-mvn clean package -Pcommon,azure
-```
-
-This will enable both the `common` Maven profile (which is normally enabled by default), as well as the `azure` 
-profile, which will include the Azure Application Insights Logback plugin in the dependencies for Kinota Server.
-
-Once you deploy the resulting JAR on your server, you will need to update the service definition to specify
-the `APPLICATION_INSIGHTS_IKEY` environment variable, for example:
-
-```
-nano /etc/systemd/system/kinota-server.service
-```
-Contents:
-```
-[Unit]
-Description=Kinota Server
-After=network.target
- 
-[Service]
-Type=forking
-Environment=APPLICATION_INSIGHTS_IKEY=78728044-8285-4d31-9dc8-5dae7d89fd5f
-ExecStart=/bin/sh -c nohup 'java -jar /path/to/kinota-server.jar --spring.profiles.active=azure --sta.datasource.url="jdbc:postgresql://MY.DB.SERVER.NAME.OR.ADDRESS:5432/sensorthings?ssl=true" --sta.datasource.username="MY_USERNAME" --sta.datasource.password="MY_PASSWORD" --sta.serviceRootUrl="https://MY.SERVER.HOSTNAME.OR.ADDRESS/SensorThingsService" --sta.jwtSecret="MY_JWT_SECRET" >> /var/log/kinota-server.log 2>&1 &'
-
-[Install]
-WantedBy=multi-user.target
-```
-
-The value of `APPLICATION_INSIGHTS_IKEY` refers to your Application Insights Instrumentation Key, and comes from your 
-Azure configuration (see 
-[here](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-java-get-started) for more information).  
-Note that you also need to set `spring.profiles.active` to `azure` to enable Application Insights logging.
 
 ## Help
 
