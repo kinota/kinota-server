@@ -99,7 +99,7 @@ server {
  
     server_name MY.SERVER.HOSTNAME.OR.ADDRESS;
  
-    ssl_certificate /path/to/MY.SERVER.HOSTNAME.OR.ADDRESS/cert.pem;
+    ssl_certificate /path/to/MY.SERVER.HOSTNAME.OR.ADDRESS/fullchain.pem;
     ssl_certificate_key /path/to/MY.SERVER.HOSTNAME.OR.ADDRESS/privkey.pem;
  
     # SensorThingsAPI
