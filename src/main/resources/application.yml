@@ -30,11 +30,11 @@ sta:
   # defaultTop - The default value for the $top query option.
   defaultTop: 100
   # maxTop - The maximum allowed value for the $top query option.
-  maxTop: 1000
+  maxTop: 10000
   # maxDataSize - The maximum allowed estimated data size (in bytes) for responses.
   maxDataSize: 25000000
   # useAbsoluteNavigationLinks - If true, navigationLinks are absolute, otherwise relative.
-  useAbsoluteNavigationLinks: false
+  useAbsoluteNavigationLinks: true
   mqtt:
     # mqtt.mqttServerImplementationClass - The java class used for running the MQTT server (must implement MqttServer interface)
     mqttServerImplementationClass: de.fraunhofer.iosb.ilt.sensorthingsserver.mqtt.moquette.MoquetteMqttServer
@@ -65,10 +65,12 @@ sta:
     #   - de.fraunhofer.iosb.ilt.sta.persistence.postgres.stringid.PostgresPersistenceManagerString
     #   - de.fraunhofer.iosb.ilt.sta.persistence.postgres.uuidid.PostgresPersistenceManagerUuid
     persistenceManagerImplementationClass: de.fraunhofer.iosb.ilt.sta.persistence.postgres.longid.PostgresPersistenceManagerLong
-    # persistence.db_jndi_datasource - JNDI data source name
-    db_jndi_datasource: jdbc/sensorThings
+    # Automatically apply database updates.
+    autoUpdateDatabase: false
     # Always add an 'orderby=id asc' to queries to ensure consistent paging.
     alwaysOrderbyId: false
+    # persistence.db_jndi_datasource - JNDI data source name
+    db_jndi_datasource: jdbc/sensorThings
   datasource:
     name: jdbc/sensorThings
     auth: Container

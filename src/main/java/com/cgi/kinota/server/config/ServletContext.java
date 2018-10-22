@@ -28,16 +28,16 @@ public class ServletContext implements ServletContextInitializer {
                         "true"));
         ctx.setInitParameter("defaultTop",
                 env.getProperty("sta.defaultTop",
-                        "20"));
+                        "100"));
         ctx.setInitParameter("maxTop",
                 env.getProperty("sta.maxTop",
-                        "100"));
+                        "10000"));
         ctx.setInitParameter("maxDataSize",
                 env.getProperty("sta.maxDataSize",
                         "25000000"));
         ctx.setInitParameter("useAbsoluteNavigationLinks",
                 env.getProperty("sta.useAbsoluteNavigationLinks",
-                        "false"));
+                        "true"));
         // MQTT settings
         ctx.setInitParameter("mqtt.mqttServerImplementationClass",
                 env.getProperty("sta.mqtt.mqttServerImplementationClass",
@@ -56,7 +56,7 @@ public class ServletContext implements ServletContextInitializer {
                         "100"));
         ctx.setInitParameter("mqtt.SubscribeThreadPoolSize",
                 env.getProperty("sta.mqtt.SubscribeThreadPoolSize",
-                        "10"));
+                        "20"));
         ctx.setInitParameter("mqtt.CreateMessageQueueSize",
                 env.getProperty("sta.mqtt.CreateMessageQueueSize",
                         "100"));
@@ -76,11 +76,14 @@ public class ServletContext implements ServletContextInitializer {
         ctx.setInitParameter("persistence.persistenceManagerImplementationClass",
                 env.getProperty("sta.persistence.persistenceManagerImplementationClass",
                         "de.fraunhofer.iosb.ilt.sta.persistence.postgres.PostgresPersistenceManager"));
-        ctx.setInitParameter("persistence.db_jndi_datasource",
-                env.getProperty("sta.persistence.db_jndi_datasource",
-                        "jdbc/sensorThings"));
+        ctx.setInitParameter("persistence.autoUpdateDatabase",
+                env.getProperty("sta.persistence.autoUpdateDatabase",
+                        "false"));
         ctx.setInitParameter("persistence.alwaysOrderbyId",
                 env.getProperty("sta.persistence.alwaysOrderbyId",
                         "false"));
+        ctx.setInitParameter("persistence.db_jndi_datasource",
+                env.getProperty("sta.persistence.db_jndi_datasource",
+                        "jdbc/sensorThings"));
     }
 }
