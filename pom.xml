@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cgi.kinota</groupId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <artifactId>kinota-server</artifactId>
     <packaging>jar</packaging>
     <name>Kinota - SensorThings API Part 1: Sensing (based on Fraunhofer IOSB STA server)</name>
@@ -25,7 +25,7 @@
     <!-- version aliases -->
     <!-- ==================================================================== -->
     <properties>
-        <fraunhofersta.version>1.5.2</fraunhofersta.version>
+        <fraunhofersta.version>1.8</fraunhofersta.version>
         <springboot.version>1.5.10.RELEASE</springboot.version>
         <springsecurity.version>4.2.4.RELEASE</springsecurity.version>
         <postgis.version>2.2.1</postgis.version>
@@ -72,7 +72,7 @@
                 </dependency>
                 <dependency>
                     <groupId>de.fraunhofer.iosb.ilt.FROST-Server</groupId>
-                    <artifactId>FROST-Server.HTTP</artifactId>
+                    <artifactId>FROST-Server.MQTTP</artifactId>
                     <version>${fraunhofersta.version}</version>
                     <classifier>classes</classifier>
                 </dependency>
