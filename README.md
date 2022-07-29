@@ -65,7 +65,7 @@ initialize the database.  The following steps outline roughly how to do this:
 * Install Liquibase
 * Download the `tables.xml` and `postgresTriggers.sql` from the [FROST-Server repo](https://github.com/FraunhoferIOSB/FROST-Server/tree/master/FROST-Server.SQL.PGLong/src/main/resources/liquibase)
   * Note, if you want to use UUID IDs instead of Long integers, download `tablesUuid` and `postgresTriggersUuid.sql` from [here](https://github.com/FraunhoferIOSB/FROST-Server/tree/master/FROST-Server.SQL.PGUuid/src/main/resources/liquibase) instead
-* Download [PostgreSQL JDBC jar](http://repo.maven.apache.org/maven2/org/postgresql/postgresql/9.4.1212/postgresql-9.4.1212.jar)
+* Download [PostgreSQL JDBC jar](https://repo.maven.apache.org/maven2/org/postgresql/postgresql/9.4.1212/postgresql-9.4.1212.jar)
 * Run `liquibase update`:
     ```bash
     liquibase --driver=org.postgresql.Driver \
